@@ -1,0 +1,35 @@
+---
+title: "Introduction"
+author: "Jeanne Moulin"
+date: "2026-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+**Introduction du sujet**
+
+Notre devoir porte sur deux communes des Hauts-de-Seine, Antony et Clamart.
+Antony compte environ 64 000 habitants tandis que Clamart compte environ
+58 000 habitants. Les deux possèdent une densité d'environ 6 700 hab/km².
+Leur proximité et leurs similarités démographiques et urbaines permettent
+une comparaison et une étude double.
+
+**Voilà les trois problématiques que nous cherchons à développer :**
+
+1. Comment s'organisent géographiquement la richesse et la pauvreté dans
+ces communes ?
+2. Quels sont les indicateurs de la pauvreté/richesse disponibles ?
+3. Quelles sont les possibles failles de notre sujet et de nos terrains
+d'étude ?
+
+**Etat des lieux des richesses :**
+
+Les Hauts-de-Seine est le deuxième département le plus riche de France, après Paris. En 2020, 11,9 % des Alto-séquanais sont considérés “pauvres” selon les critères de l’INSEE, ce qui se situe en dessous de la moyenne nationale (environ 15%).
+Le revenu fiscal moyen par ménage est d’environ 37 000 euros en 2024 à Clamart. Il est d’environ 42 000 euros à Antony. On a donc un léger écart de richesse entre les deux communes, même si elles restent dans la même tranche, très élevée. 
+Au sein-même des communes, la répartition n’est pas égale, et dépend des quartiers, de l’organisation urbaine.
+
