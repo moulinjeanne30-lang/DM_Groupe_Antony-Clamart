@@ -1,0 +1,50 @@
+---
+title: "Indicateurs"
+author: "Jeanne Moulin"
+date: "2026-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r installation, message=FALSE, warning=FALSE}
+install.packages("sf")
+install.packages("ggplot2")
+install.packages("osmdata")
+```
+```{r cartes_indicateurs, message=FALSE, warning=FALSE}
+library(sf)
+library(ggplot2)
+library(osmdata)
+
+# Chargement des limites communales
+antony_limite <- st_read("Limites Antony.geojson")
+clamart_limite <- st_read("Limites Clamart.geojson")
+
+# Récupération des maisons de quartier via OpenStreetMap
+maisons_antony <- opq(bbox = st_bbox(antony_limite)) %>%
+  add_osm_feature(key = "amenity", value = "community_centre") %>%
+  osmdata_sf()
+
+maisons_clamart <- opq(bbox = st_bbox(clamart_limite)) %>%
+  add_osm_feature(key = "amenity", value = "community_centre") %>%
+  osmdata_sf()
+
+# Carte Antony
+ggplot() +
+  geom_sf(data = antony_limite, fill = "lightgrey", color = "black") +
+  geom_sf(data = maisons_antony$osm_points, color = "red", size = 3) +
+  labs(title = "Maisons de quartier - Antony") +
+  theme_minimal()
+
+# Carte Clamart
+ggplot() +
+  geom_sf(data = clamart_limite, fill = "lightgrey", color = "black") +
+  geom_sf(data = maisons_clamart$osm_points, color = "red", size = 3) +
+  labs(title = "Maisons de quartier - Clamart") +
+  theme_minimal()
+```
+
+**Schéma de géotraitement**
