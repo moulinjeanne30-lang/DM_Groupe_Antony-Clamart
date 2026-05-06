@@ -1,0 +1,68 @@
+---
+title: "Jointure"
+author: "Jeanne Moulin"
+date: "2026-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r installation, message=FALSE, warning=FALSE}
+install.packages("sf")
+install.packages("ggplot2")
+install.packages("tidyverse")
+install.packages("osmdata")
+```
+```{r jointure, message=FALSE, warning=FALSE}
+library(sf)
+library(ggplot2)
+library(tidyverse)
+library(osmdata)
+
+# Chargement des limites communales
+antony_limite <- st_read("Limites Antony.geojson")
+clamart_limite <- st_read("Limites Clamart.geojson")
+
+# Chargement des données carroyées
+antony <- read.csv("Données carroyées Antony.csv", sep=";", encoding="UTF-8")
+clamart <- read.csv("Données carroyées Clamart.csv", sep=";", encoding="UTF-8")
+
+# Conversion en objet spatial
+antony_sf <- st_as_sf(antony, wkt = "Point géographique", crs = 3035)
+clamart_sf <- st_as_sf(clamart, wkt = "Point géographique", crs = 3035)
+
+# Reprojection dans le même système de coordonnées
+antony_sf <- st_transform(antony_sf, st_crs(antony_limite))
+clamart_sf <- st_transform(clamart_sf, st_crs(clamart_limite))
+
+# Récupération des maisons de quartier
+maisons_antony <- opq(bbox = st_bbox(antony_limite)) %>%
+  add_osm_feature(key = "amenity", value = "community_centre") %>%
+  osmdata_sf()
+
+maisons_clamart <- opq(bbox = st_bbox(clamart_limite)) %>%
+  add_osm_feature(key = "amenity", value = "community_centre") %>%
+  osmdata_sf()
+
+# Carte jointure Antony
+ggplot() +
+  geom_sf(data = antony_limite, fill = "lightgrey", color = "black") +
+  geom_sf(data = antony_sf, aes(color = `Nombre de ménages pauvres`), size = 2) +
+  scale_color_gradient(low = "yellow", high = "red") +
+  geom_sf(data = maisons_antony$osm_points, color = "blue", size = 3) +
+  labs(title = "Répartition des richesses et maisons de quartier - Antony",
+       color = "Nb ménages pauvres") +
+  theme_minimal()
+
+# Carte jointure Clamart
+ggplot() +
+  geom_sf(data = clamart_limite, fill = "lightgrey", color = "black") +
+  geom_sf(data = clamart_sf, aes(color = `Nombre de ménages pauvres`), size = 2) +
+  scale_color_gradient(low = "yellow", high = "red") +
+  geom_sf(data = maisons_clamart$osm_points, color = "blue", size = 3) +
+  labs(title = "Répartition des richesses et maisons de quartier - Clamart",
+       color = "Nb ménages pauvres") +
+  theme_minimal()
+```
